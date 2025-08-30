@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django test Login page</title>
+</head>
+<body>
+    
+    <h1> Login page </h1>
+    <form action="{% url 'login' %}" method='POST'>
+        {% csrf_token %}
+        
+        <label>Name:</label>
+        {% comment %} <input placeholder="Enter your Name" type="text" required> {% endcomment %}
+        {{form.name}}
+        <br>
+        <label>Age:</label>
+        {% comment %} <input placeholder="Enter your age" type="number" required> {% endcomment %}
+        {{form.age}}
+        <br>
+        <label>Email:</label>
+        {% comment %} <input placeholder="__@__.com" type="text" required> {% endcomment %}
+        {{form.email}}
+        <br>
+        <label>Phone No:</label>
+        {% comment %} <input placeholder="XXXXXXXXXX"type="number" required><br> {% endcomment %}
+        {{form.phone_no}}
+        <br>
+        <label>Password:</label>
+        {% comment %} <input placeholder="abc#123" type="password" required><br> {% endcomment %}
+        {{form.password}}
+        <br>
+        <label>status:</label>
+        {{form.status}}
+       
+        <button type='submit'>Submit</button>
+
+    </form>
+    
+    </body>
+</html>
