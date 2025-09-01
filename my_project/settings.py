@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
+from decouple import config
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = 'django-insecure-c&b3+45w+lst9vpc-b$=6vl$wu2jlo=l447x(0*-j9(-*t&f#z'
 
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")
-DEBUG = os.getenv("DEBUG", "False") == "True"
+# DEBUG = os.getenv("DEBUG", "False") == "True"
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', '*']
 
@@ -82,24 +83,28 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
-    )
-}
-# {
-#         'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'user_info',
-#         'HOST': 'localhost',
-#         'PORT':'',
-#         'USER':'user',
-#         'PASSWORD':'2004'
-#     }
-# }
+if os.environ.get('RENDER'):
+    DATABASES = {
+        'default': dj_database_url.parse(
+            config('Database_URL')
+        )
+    }
+else:
+
+    DATABASES = {
+        'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'user_info',
+        'HOST': 'localhost',
+        'PORT':'3306',
+        'USER':'root',
+        'PASSWORD':'Dey@2004'
+    }
+ }
+
 # db_from_env = dj_database_url.config(conn_max_age=500)
 # DATABASES['default'].update(db_from_env)
-
+#postgresql://my_project_db_sl17_user:ZvnPoPyq4gpGlB3xb8RMk7bINtlC6k8h@dpg-d2pfkdp5pdvs73eg93v0-a/my_project_db_sl17
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
