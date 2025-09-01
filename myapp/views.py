@@ -11,6 +11,7 @@ def success(request):
     return render(request, 'success.html')
 
 def login(request):
+    
     if request.method =='POST':
         form = userinfoform(request.POST)
         print("Form submited!")

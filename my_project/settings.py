@@ -14,6 +14,14 @@ import os
 from pathlib import Path
 import dj_database_url
 from decouple import config
+from django.core.management import call_command
+
+if os.environ.get('RUN_MAIN') or os.environ.get('WERKZEUG_RUN_MAIN'):
+    try:
+        call_command("migrate", interactive=False)
+    except Exception as e:
+        print(f"Migration failed: {e}")
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,11 +35,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = 'django-insecure-c&b3+45w+lst9vpc-b$=6vl$wu2jlo=l447x(0*-j9(-*t&f#z'
 
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")
-# DEBUG = os.getenv("DEBUG", "False") == "True"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', '*']
+ALLOWED_HOSTS = ['127.0.0.1', 'my-project-testdjango.onrender.com']
 
 
 # Application definition
@@ -83,30 +90,42 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if os.environ.get('RENDER'):
-    DATABASES = {
-        'default': dj_database_url.parse(
-            config('Database_URL')
-        )
+# if os.environ.get('RENDER'):
+# DATABASE_URL= 'postgresql://my_project_db_sl17_user:ZvnPoPyq4gpGlB3xb8RMk7bINtlC6k8h@dpg-d2pfkdp5pdvs73eg93v0-a/my_project_db_sl17'
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv(
+            "DATABASE_URL",
+            "postgresql://my_project_db_sl17_user:ZvnPoPyq4gpGlB3xb8RMk7bINtlC6k8h@dpg-d2pfkdp5pdvs73eg93v0-a.oregon-postgres.render.com:5432/my_project_db_sl17"
+  ),
+    conn_max_age=600,
+    ssl_require=True,)
     }
-else:
 
+if os.environ.get("RENDER"):  
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.getenv(
+            "DATABASE_URL",
+            "postgresql://my_project_db_sl17_user:ZvnPoPyq4gpGlB3xb8RMk7bINtlC6k8h@dpg-d2pfkdp5pdvs73eg93v0-a.oregon-postgres.render.com:5432/my_project_db_sl17"
+        ),
+            conn_max_age=600,
+            ssl_require=True,)
+            }
+else: 
     DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'user_info',
-        'HOST': 'localhost',
-        'PORT':'3306',
-        'USER':'root',
-        'PASSWORD':'Dey@2004'
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'your_local_db_name',
+            'USER': 'your_local_db_user',
+            'PASSWORD': 'your_local_db_password',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
     }
- }
 
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
-#postgresql://my_project_db_sl17_user:ZvnPoPyq4gpGlB3xb8RMk7bINtlC6k8h@dpg-d2pfkdp5pdvs73eg93v0-a/my_project_db_sl17
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -140,7 +159,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT =  os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
