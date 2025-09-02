@@ -38,7 +38,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'my-project-testdjango.onrender.com']
+ALLOWED_HOSTS = ['*','127.0.0.1', 'my-project-testdjango.onrender.com']
 
 
 # Application definition
@@ -94,36 +94,28 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 # DATABASE_URL= 'postgresql://my_project_db_sl17_user:ZvnPoPyq4gpGlB3xb8RMk7bINtlC6k8h@dpg-d2pfkdp5pdvs73eg93v0-a/my_project_db_sl17'
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv(
-            "DATABASE_URL",
-            "postgresql://my_project_db_sl17_user:ZvnPoPyq4gpGlB3xb8RMk7bINtlC6k8h@dpg-d2pfkdp5pdvs73eg93v0-a.oregon-postgres.render.com:5432/my_project_db_sl17"
-  ),
-    conn_max_age=600,
-    ssl_require=True,)
-    }
+        default= os.getenv("DATABASE_URL",'postgres://postgres:Dey@2004@localhost:5432/user_info'),
+        conn_max_age=600,
+        ssl_require=False
+    )
+}
 
-if os.environ.get("RENDER"):  
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=os.getenv(
-            "DATABASE_URL",
-            "postgresql://my_project_db_sl17_user:ZvnPoPyq4gpGlB3xb8RMk7bINtlC6k8h@dpg-d2pfkdp5pdvs73eg93v0-a.oregon-postgres.render.com:5432/my_project_db_sl17"
-        ),
-            conn_max_age=600,
-            ssl_require=True,)
-            }
-else: 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'your_local_db_name',
-            'USER': 'your_local_db_user',
-            'PASSWORD': 'your_local_db_password',
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-        }
-    }
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=config('DATABASE_URL', default='postgres://postgres:password@localhost:5432/mydb')
+#     )
+# }
+# DATABASES = {
+#         'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'user_info',
+#         'USER':'root',
+#         'PASSWORD':'Dey@2004',
+#         'HOST': 'localhost',
+#         'PORT':'3306'
+#     }
+# }
 
 
 
@@ -160,7 +152,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT =  os.path.join(BASE_DIR, 'staticfiles')
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

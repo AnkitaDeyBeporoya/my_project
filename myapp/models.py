@@ -16,8 +16,8 @@ class userdata(models.Model):
     added_time=models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'members_userdata'  
-        managed = False  
+        db_table = 'user_data'  
+        # managed = False  
 
     def __str__(self):
         return self.name
