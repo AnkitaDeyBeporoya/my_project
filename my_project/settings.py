@@ -100,25 +100,6 @@ DATABASES = {
     )
 }
 
-
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=config('DATABASE_URL', default='postgres://postgres:password@localhost:5432/mydb')
-#     )
-# }
-# DATABASES = {
-#         'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'user_info',
-#         'USER':'root',
-#         'PASSWORD':'Dey@2004',
-#         'HOST': 'localhost',
-#         'PORT':'3306'
-#     }
-# }
-
-
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
